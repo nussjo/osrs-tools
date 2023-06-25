@@ -1,0 +1,120 @@
+{
+    "folders": [
+        {
+            "path": "projects/loot_tracker",
+            "name": "loot_tracker"
+        },
+        // have this last
+        {
+            "path": ".",
+            "name": "root"
+        }
+    ],
+    "settings": {
+        "C_Cpp.autoAddFileAssociations": false,
+        "cmake.allowCommentsInPresetsFile": false,
+        "cmake.autoSelectActiveFolder": false,
+        "cmake.configureOnOpen": false,
+        "cmake.copyCompileCommands": "${workspaceFolder:root}/build/compile_commands.json",
+        "cmake.ignoreCMakeListsMissing": true,
+        "cmake.statusbar.advanced": {
+            "build": {
+                "visibility": "default"
+            },
+            "configurePreset": {
+                "visibility": "default"
+            },
+            "launchTarget": {
+                "visibility": "default"
+            },
+            "workspace": {
+                "visibility": "default"
+            }
+        },
+        "cmake.statusbar.visibility": "hidden",
+        "cmake.useCMakePresets": "always",
+        "debug.showInStatusBar": "always",
+        "editor.formatOnSave": true,
+        "editor.renderWhitespace": "all",
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "tasks.statusbar.default.hide": true,
+        "testMate.cpp.debug.configTemplate": {
+            "type": "${assert:testMate.cpp.debug.configTemplate doesn't support this platform!}",
+            "linux": {
+                "type": "cppdbg",
+                "MIMode": "gdb"
+            },
+            "program": "${exec}",
+            "args": "${argsArray}",
+            "cwd": "${cwd}",
+            "externalConsole": false
+        },
+        "testMate.cpp.test.advancedExecutables": [
+            {
+                "pattern": "**/{build}/**/tests/**/*Test",
+                "gtest": {
+                    "debug.enableOutputColouring": true
+                }
+            }
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Launch (gdb)",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${command:cmake.launchTargetPath}",
+                "args": [],
+                "stopAtEntry": true,
+                "cwd": "${command:cmake.launchTargetDirectory}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "problemMatcher": [],
+        "options": {
+            "cwd": "${workspaceFolder:root}"
+        },
+        "tasks": [
+            {
+                "label": "install debug",
+                "detail": "conan install for debug",
+                "type": "shell",
+                "hide": true,
+                "command": "conan install . -b missing -pr:b conan/profiles/x86_64-linux-gcc12-release -pr:h conan/profiles/x86_64-linux-gcc12-debug",
+            },
+            {
+                "label": "install release",
+                "detail": "conan install for release",
+                "type": "shell",
+                "hide": true,
+                "command": "conan install . -b missing -pr:b conan/profiles/x86_64-linux-gcc12-release -pr:h conan/profiles/x86_64-linux-gcc12-release",
+            },
+            {
+                "label": "conan install",
+                "detail": "conan install for debug/release",
+                "type": "shell",
+                "dependsOrder": "sequence",
+                "dependsOn": [
+                    "install debug",
+                    "install release",
+                ],
+            }
+        ],
+        "statusbar.default.hide": false
+    }
+}
